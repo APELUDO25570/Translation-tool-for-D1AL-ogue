@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-unity_loc_tool.py - translates Unity games that use Unity Localization + Addressables.
-Only standard library for Python 3.8+. Commands:
+unity_loc_tool.py - traduz jogos Unity que usam Unity Localization + Addressables.
+Só biblioteca padrão do Python 3.8+. Comandos:
 
-extract BUNDLE -o FOLDER extracts text to CSV (and updates existing CSVs)
-check FOLDER [--font F.ttf] checks tags, {0}, \\n and shows progress
-build BUNDLE FOLDER -o OUTPUT [--catalog catalog.bin] generates the translated bundle
-install OUTPUT --game GAME_FOLDER installs with backup (restore undoes)
+  extract  BUNDLE -o PASTA        extrai textos para CSV (e atualiza CSVs existentes)
+  check    PASTA [--font F.ttf]   confere tags, {0}, \\n e mostra o progresso
+  build    BUNDLE PASTA -o SAIDA [--catalog catalog.bin]   gera o bundle traduzido
+  install  SAIDA --game PASTA_DO_JOGO   instala com backup   (restore desfaz)
 """
-import sys, os, re, csv, json, struct, lzma, shutil, argparse 
+import sys, os, re, csv, json, struct, lzma, shutil, argparse
 
 # ---------------------------------------------------------------- UnityFS
 def lz4_block(src, usize):

@@ -1,24 +1,16 @@
-# How to help translate
+# Como ajudar a traduzir
 
-1. Open the CSV table file in `projects/<game>/<language>/` (Excel, LibreOffice, or Google Sheets; UTF-8 encoding).
+1. Abra o arquivo CSV da tabela em `projects/<jogo>/<idioma>/` (Excel, LibreOffice ou Google Planilhas; codificação UTF-8).
+   `DialogueTable_*.csv` é a maior (diálogos).
+2. Preencha **somente** a coluna `translation`. Linha vazia = continua em inglês no jogo.
+3. Regras:
+   - Mantenha idênticos: `<color=...>`, `<blink>`, `<shake ...>`, `{0}`, `{1}` e `\n` (barra + n). Não troque por quebra de linha real.
+   - Não use aspas curvas nem caracteres fora da fonte do jogo (rode `check --font`).
+   - Falas curtas: o balão do jogo é pequeno. Evite textos muito mais longos que o inglês.
+   - Consistência: Chroma City, Neon Shine, E.V.E, Zênite Cromático, Dia da Noite Polar (veja o glossário abaixo).
+4. Rode `python unity_loc_tool.py check projects/<jogo>/<idioma>` antes de enviar. O CI faz a mesma checagem.
+5. Abra um Pull Request. Uma tabela ou um trecho de linhas por PR facilita a revisão.
 
-`DialogueTable_*.csv` is the largest (dialogues).
-
-2. Fill in **only** the `translation` column. Empty line = continues in English in the game.
-
-3. Rules:
-
-- Keep identical: `<color=...>`, `<blink>`, `<shake ...>`, `{0}`, `{1}` and `\n` (slash + n). Do not replace with a real line break.
-
-- Do not use curly quotes or characters outside the game's font (run `check --font`).
-
-- Short dialogues: the game's speech bubble is small. Avoid texts much longer than the English version.
-
-- Consistency: Chroma City, Neon Shine, E.V.E., Chromatic Zenith, Polar Daynight (see glossary below).
-4. Run `python unity_loc_tool.py check projects/<game>/<language>` before submitting. CI does the same check.
-5. Open a Pull Request. A table or a snippet of lines per PR facilitates review.
-
-## Glossary (D1AL-ogue pt-BR)
-Chroma City · Neon Shine · E.V.E.(s) · Stability Officers · Chromatic Zenith · Polar Daynight ·
-LDS (Light Deficiency Syndrome) · Energy/Logic/Neural Unit · Synaptic Unit · Manager (Chris).
- 
+## Glossário (D1AL-ogue pt-BR)
+Chroma City · Neon Shine · E.V.E(s) · Oficiais de Estabilidade · Zênite Cromático · Dia da Noite Polar ·
+LDS (Síndrome de Deficiência de Luz) · Unidade de Energia / Lógica / Neural · Unidade Sináptica · Gerente (o Chris).

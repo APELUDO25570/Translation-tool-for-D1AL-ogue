@@ -1,24 +1,30 @@
-# Translation-tool-for-D1AL-ogue
+# unity-loc-tool
 
-"unity_loc_tool.py" is a standalone tool, written only with the standard Python library, so it doesn't require installation. Translators don't need it.
+Ferramenta (Python 3.8+, sem dependências) para traduzir jogos **Unity que usam Unity Localization + Addressables**.
+Testada com D1AL-ogue (Unity 6000.0.61f1). Funciona com bundles LZ4, LZMA ou sem compressão.
 
-For translators who work only with spreadsheets, the tool extracts each text table to a CSV file with three columns: source, translation, and count. Each repeated text appears only once, and the file can be opened in Excel, Google Sheets, or LibreOffice.
+## Fluxo em 4 passos
 
-Workflow for another game:
-1. Generate CSV files from the localization tables.
-2. Verify the CSVs.
-3. Generate the modified `catalog.bin` file.
+```
+python unity_loc_tool.py extract  "<bundle de textos en-US>" -o projects/MeuJogo/pt-BR
+   (traduza os CSVs)
+python unity_loc_tool.py check    projects/MeuJogo/pt-BR [--font fonte.ttf]
+python unity_loc_tool.py build    "<bundle>" projects/MeuJogo/pt-BR -o saida --catalog ".../aa/catalog.bin"
+python unity_loc_tool.py install  saida --game "C:\...\MeuJogo"      # faz backup (.bak)
+python unity_loc_tool.py restore  --game "C:\...\MeuJogo"            # desfaz
+```
 
-4. Enable CRC checking. Without it, the game may not open. This step is only necessary for catalogs that haven't yet received this adjustment.
+- `extract` pode ser rodado de novo depois de uma atualização do jogo: mantém o que já foi traduzido, acrescenta textos novos e informa os removidos.
+- `check` confere se `<tags>`, `{0}`, `\n` e quebras de linha batem com o original e se a **fonte do jogo** tem os caracteres usados (`--font`, requer `pip install fonttools`). Retorna erro se houver problema (bom para CI).
+- `build` ignora (e avisa sobre) traduções com problema de formatação, para não quebrar o jogo.
+- `--catalog` zera o CRC do bundle no `catalog.bin` (o Addressables recusa bundles modificados). Sem isso o jogo pode não abrir ou mostrar menus quebrados.
 
-Limitations:
+## Para tradutores
+Veja [CONTRIBUTING.md](CONTRIBUTING.md). Não precisa instalar nada: edite os CSVs e abra um Pull Request.
 
-- The tool only edits the Unity Localization text tables. Texts such as "Repair Point", "Require Unit", the shortcut bar, and capture dates are not included and remain in English.
-
-The generated bundle is not compressed, so it is larger than the original, but it remains valid.
-
-Tables with per-entry metadata are ignored.
-
-The tool has only been tested on Windows with Unity 6. Earlier versions are not supported.
-
- 
+## Limitações conhecidas
+- Só edita **StringTables** do Unity Localization. Textos fixos na interface (ex.: "Repair Point", barra de atalhos, datas) ficam em outros assets e não são cobertos ainda.
+- O bundle gerado é sem compressão (maior, mas válido). 
+- Tabelas com metadados por entrada são puladas. Catálogos JSON (Addressables antigos) ainda não têm ajuste automático de CRC.
+- Testado só em Windows/Unity 6; versões antigas do SerializedFile (< v17) não são suportadas.
+- Não distribuímos arquivos do jogo. Use cópias que você mesmo possui.
